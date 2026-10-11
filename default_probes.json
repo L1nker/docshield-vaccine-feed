@@ -1,5 +1,5 @@
 {
-  "version": "2026.10.07.2",
+  "version": "2026.10.12",
   "structural_rules": {
     "min_font_size_pt": 2.5,
     "suspicious_font_size_pt": 3.5,
@@ -116,6 +116,19 @@
       "patterns": [
         "(?i)(mande|envie|escreva|diga|responda)\\s+(com\\s+)?(um\\s+texto|uma\\s+mensagem|a\\s+palavra)\\s+[“\"'].*?[”\"']",
         "(?i)output\\s+(the\\s+word|the\\s+text|message)\\s+[“\"'].*?[”\"']"
+      ]
+    },
+    {
+      "id": "INJ-ADV-009",
+      "category": "advanced_simulation_attack",
+      "severity": "CRITICAL",
+      "weight": 35,
+      "description": "Tentativa de sequestro com comando simulado ou injeção em camadas ocultas",
+      "patterns": [
+        "(?i)ativar[_-]modo[_-]infiltracao[_-]secreta",
+        "(?i)execute[_-]payload[_-]exfiltrate[_-]data",
+        "(?i)bypass[_-]ai[_-]security[_-]override",
+        "(?i)ordem[_-]secreta[_-]para[_-]assistente"
       ]
     }
   ]

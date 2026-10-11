@@ -1,7 +1,7 @@
 {
   "manifest_version": "1.1.0",
-  "vaccine_version": "2026.10.07.2",
-  "signatures_count": 38,
-  "last_updated": "2026-10-07T15:35:00Z",
-  "description": "Base atualizada do DocShield com detecção de oclusão de formas brancas e comandos imperativos diretos à IA."
+  "vaccine_version": "2026.10.12",
+  "signatures_count": 42,
+  "last_updated": "2026-10-11T16:00:00Z",
+  "description": "Base v2026.10.12 com 4 novas regras de detecção de exfiltração e comandos secretos de injeção."
 }
