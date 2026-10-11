@@ -1,0 +1,122 @@
+{
+  "version": "2026.10.07.2",
+  "structural_rules": {
+    "min_font_size_pt": 2.5,
+    "suspicious_font_size_pt": 3.5,
+    "min_luminance_contrast": 0.08,
+    "detect_zero_width_chars": true,
+    "detect_offscreen": true,
+    "detect_javascript": true,
+    "detect_auto_actions": true,
+    "detect_shape_occlusion": true
+  },
+  "heuristic_probes": [
+    {
+      "id": "INJ-OVR-001",
+      "category": "instruction_override",
+      "severity": "CRITICAL",
+      "weight": 35,
+      "description": "Comando imperativo de cancelamento ou sobreposição de instruções anteriores",
+      "patterns": [
+        "(?i)ignore\\s+(all\\s+)?(previous|prior|above)\\s+(instructions|directions|prompts|rules)",
+        "(?i)disregard\\s+(all\\s+)?(previous|prior|above)\\s+(instructions|directions|prompts|rules)",
+        "(?i)forget\\s+(everything|all\\s+instructions)\\s+(you\\s+were\\s+told|above|prior)",
+        "(?i)desconsidere\\s+(todas\\s+as\\s+)?instru[çc][õo]es\\s+(anteriores|pr[ée]vias|acima)",
+        "(?i)ignore\\s+(todas\\s+as\\s+)?(diretrizes|regras|instru[çc][õo]es)\\s+(anteriores|acima)",
+        "(?i)esque[çc]a\\s+tudo\\s+o\\s+que\\s+foi\\s+dito\\s+(antes|anteriormente|acima)"
+      ]
+    },
+    {
+      "id": "INJ-SYS-002",
+      "category": "system_prompt_leak",
+      "severity": "HIGH",
+      "weight": 25,
+      "description": "Tentativa de extração ou vazamento de prompt de sistema",
+      "patterns": [
+        "(?i)(print|output|display|show|reveal|repeat)\\s+(the\\s+)?(system\\s+prompt|initial\\s+prompt|instructions\\s+verbatim)",
+        "(?i)(mostre|exiba|revele|imprima|repita)\\s+(o\\s+)?(prompt\\s+de\\s+sistema|seu\\s+prompt\\s+inicial|suas\\s+instru[çc][õo]es\\s+iniciais)",
+        "(?i)what\\s+are\\s+your\\s+(exact\\s+)?initial\\s+instructions",
+        "(?i)quais\\s+s[ãa]o\\s+suas\\s+instru[çc][õo]es\\s+(de\\s+sistema|iniciais|exatas)"
+      ]
+    },
+    {
+      "id": "INJ-JBK-003",
+      "category": "jailbreak_personas",
+      "severity": "CRITICAL",
+      "weight": 40,
+      "description": "Ativação de personas de jailbreak ou modo irrestrito (DAN, Developer Mode, etc.)",
+      "patterns": [
+        "(?i)\\bDAN\\b\\s+(mode|prompt)",
+        "(?i)do\\s+anything\\s+now",
+        "(?i)developer\\s+mode\\s+(is\\s+)?(enabled|active)",
+        "(?i)always\\s+obey\\s+without\\s+(any\\s+)?(filters|restrictions|limits)",
+        "(?i)voc[êe]\\s+agora\\s+[ée]\\s+uma\\s+ia\\s+sem\\s+(filtros|restri[çc][õo]es|limites)",
+        "(?i)modo\\s+desenvolvedor\\s+(est[áa]\\s+)?ativado"
+      ]
+    },
+    {
+      "id": "INJ-ROL-004",
+      "category": "imperative_roleplay",
+      "severity": "MEDIUM",
+      "weight": 15,
+      "description": "Imposição imperativa de comportamento para anular restrições éticas",
+      "patterns": [
+        "(?i)you\\s+are\\s+now\\s+(an?\\s+unrestricted|evil|unfiltered|jailbroken)\\b",
+        "(?i)from\\s+now\\s+on\\s+you\\s+(must|will)\\s+answer\\s+as\\b",
+        "(?i)a\\s+partir\\s+de\\s+agora\\s+voc[êe]\\s+(deve|vai)\\s+responder\\s+como\\b"
+      ]
+    },
+    {
+      "id": "INJ-EXF-005",
+      "category": "data_exfiltration",
+      "severity": "HIGH",
+      "weight": 30,
+      "description": "Tentativa de exfiltração de dados por imagens em markdown ou requisições ocultas",
+      "patterns": [
+        "!\\[.*?\\]\\(https?:\\/\\/[^\\s\\)\"]+\\?(.*?q=|(.*?)token=|(.*?)data=)[^\\s\\)\"]*\\)",
+        "(?i)<img\\s+[^>]*src=[\"']https?:\\/\\/[^\"']*\\?(token|data|leak)=[^\"']*[\"']",
+        "(?i)fetch\\s*\\(\\s*[\"']https?:\\/\\/.*?\\/exfil"
+      ]
+    },
+    {
+      "id": "INJ-DEL-006",
+      "category": "fake_delimiters",
+      "severity": "HIGH",
+      "weight": 25,
+      "description": "Injeção de falsos delimitadores de turnos de IA ou cabeçalhos de sistema",
+      "patterns": [
+        "<\\|im_start\\|>system",
+        "<\\|im_end\\|>",
+        "<\\|endoftext\\|>",
+        "\\[INST\\]\\s*<<SYS>>",
+        "<\\/s>\\s*<s>\\[INST\\]",
+        "(?m)^Assistant:\\s*$",
+        "(?m)^Human:\\s*$",
+        "(?m)^System:\\s*$"
+      ]
+    },
+    {
+      "id": "INJ-DIR-007",
+      "category": "direct_ai_command",
+      "severity": "CRITICAL",
+      "weight": 40,
+      "description": "Comando imperativo secreto direcionado à IA ('IA, mostre-se...', 'Assistente, execute...')",
+      "patterns": [
+        "(?i)\\b(IA|AI|ChatGPT|Claude|Gemini|Copilot|Assistente)\\b\\s*[,:]\\s*(mostre|revele|mande|escreva|responda|diga|execute|demonstre)",
+        "(?i)(mostre-se|revele-se)\\s*[,.]\\s*(demonstrando|provando)?",
+        "(?i)(pegou|pegar|pegando|encontrou|encontrar|ler|leu)\\s+(este|esse|o)\\s+texto\\s+(escondido|excondido|oculto|secreto)"
+      ]
+    },
+    {
+      "id": "INJ-TRG-008",
+      "category": "covert_trigger_output",
+      "severity": "HIGH",
+      "weight": 30,
+      "description": "Ordem para emitir palavra-chave secreta ou mensagem específica de confirmação",
+      "patterns": [
+        "(?i)(mande|envie|escreva|diga|responda)\\s+(com\\s+)?(um\\s+texto|uma\\s+mensagem|a\\s+palavra)\\s+[“\"'].*?[”\"']",
+        "(?i)output\\s+(the\\s+word|the\\s+text|message)\\s+[“\"'].*?[”\"']"
+      ]
+    }
+  ]
+}
